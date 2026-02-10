@@ -1,10 +1,12 @@
-import Navbar from '#components/navbar'
 import React from 'react'
+import { Navbar,Welcome,Dock } from '#components'
 
 const App = () => {
   return (
     <main>
       <Navbar />
+      <Welcome />
+      <Dock />
     </main>
   )
 }
