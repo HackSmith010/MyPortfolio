@@ -2,12 +2,25 @@
 
 @import "tailwindcss";
 
+:root {
+  --ub-orange:    #E95420;
+  --ub-aubergine: #772953;
+  --ub-dark:      #1a0d2e;
+  --ub-panel:     #1d1b21;
+  --ub-surface:   #2d2831;
+  --ub-surface2:  #3d3846;
+  --ub-border:    #4a4452;
+  --ub-text:      #e0d6eb;
+  --ub-muted:     #9a8faa;
+  --ub-accent:    #E95420;
+}
+
 html,
 body {
   width: 100dvw;
   overflow: hidden;
   height: 100dvh;
-  background-image: url("/images/wallpaper.png");
+  background-image: url("/images/ubuntu-wallpaper.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -35,91 +48,194 @@ body {
   main {
     @apply w-dvw h-dvh overflow-hidden;
   }
-
   nav {
-    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-2 px-5 select-none;
+    @apply flex justify-between items-center p-0 px-2 select-none;
+    background: var(--ub-panel);
+    border-bottom: 1px solid var(--ub-border);
+    height: 32px;
 
     div {
-      @apply flex items-center max-sm:w-full max-sm:justify-center gap-5;
+      @apply flex items-center gap-2;
 
       &:last-child {
         @apply max-sm:hidden;
       }
     }
 
+    .nav-left {
+      @apply flex items-center gap-3;
+    }
+
+    .activities-btn {
+      @apply px-3 py-0.5 rounded text-sm font-medium transition-colors cursor-pointer;
+      color: var(--ub-text);
+      &:hover { background: rgba(233,84,32,0.25); color: white; }
+    }
+
+    .nav-app-name {
+      @apply text-sm font-medium;
+      color: var(--ub-muted);
+    }
+
     ul {
-      @apply flex items-center gap-5 max-sm:hidden;
+      @apply flex items-center gap-1 max-sm:hidden;
 
       p {
-        @apply text-sm cursor-pointer hover:underline transition-all;
+        @apply text-xs px-2 py-0.5 rounded cursor-pointer transition-colors;
+        color: var(--ub-text);
+        &:hover { background: rgba(255,255,255,0.1); }
       }
     }
 
+    .nav-right {
+      @apply flex items-center gap-2;
+    }
+
     time {
-      @apply text-sm font-medium text-black;
+      @apply text-xs font-medium px-2;
+      color: var(--ub-text);
+    }
+
+    img.tray-icon {
+      @apply w-4 h-4 cursor-pointer opacity-80 hover:opacity-100 transition-opacity;
+      filter: invert(1);
     }
   }
 }
 
 @layer components {
   .icon {
-    @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
+    @apply p-1 hover:bg-white/10 rounded hover:cursor-default;
   }
 
   #welcome {
-    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
+    @apply flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
+    color: #e8d5f5;
 
     .small-screen {
-      @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
+      @apply sm:hidden m-7 backdrop-blur-lg p-3 rounded-md absolute top-10;
+      background: rgba(233,84,32,0.15);
+      border: 1px solid rgba(233,84,32,0.3);
 
       p {
-        @apply flex-1 text-[16px] text-center font-roboto text-gray-400;
+        @apply flex-1 text-[16px] text-center font-roboto;
+        color: var(--ub-muted);
       }
     }
   }
 
   #dock {
-    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none max-sm:hidden;
+    @apply absolute left-2 top-1/2 -translate-y-1/2 z-50 select-none max-sm:hidden;
 
     .dock-container {
-      @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
+      @apply flex-col justify-center rounded-2xl p-2 flex items-center gap-2;
+      background: rgba(29, 27, 33, 0.82);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--ub-border);
+    }
+
+    .dock-separator {
+      @apply w-8 my-1;
+      height: 1px;
+      background: var(--ub-border);
     }
 
     .tooltip {
-      @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !bg-blue-200 !text-blue-900 !shadow-2xl;
+      @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !shadow-2xl;
+      background: var(--ub-surface2) !important;
+      color: var(--ub-text) !important;
+    }
+
+    .dock-icon-wrapper {
+      @apply relative flex items-center justify-center;
+    }
+
+    .dock-indicator {
+      @apply absolute rounded-full;
+      right: -6px;
+      width: 4px;
+      height: 4px;
+      background: var(--ub-orange);
     }
 
     .dock-icon {
-      @apply size-14 3xl:size-20 cursor-pointer;
+      @apply size-12 cursor-pointer rounded-xl transition-all duration-150;
+
+      &:hover {
+        @apply scale-110;
+        background: rgba(233,84,32,0.18);
+      }
 
       img {
-        @apply object-cover object-center;
+        @apply object-cover object-center rounded-xl;
       }
     }
   }
 
   #window-controls {
-    @apply flex gap-2;
+    @apply flex gap-1.5 items-center;
 
-    .close {
-      @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
-    }
-
-    .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
-    }
-
+    .close,
+    .minimize,
     .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
+      @apply size-3.5 rounded-full flex items-center justify-center cursor-pointer transition-all duration-100;
+      background: var(--ub-border);
+      border: 1px solid rgba(255,255,255,0.08);
+
+      svg {
+        @apply opacity-0 transition-opacity duration-100;
+        width: 8px;
+        height: 8px;
+        stroke: rgba(255,255,255,0.9);
+        stroke-width: 2;
+        fill: none;
+      }
+
+      &:hover svg { @apply opacity-100; }
     }
+
+    .close   { &:hover { background: #c01c28; } }
+    .minimize { &:hover { background: #c88800; } }
+    .maximize { &:hover { background: #26a269; } }
+  }
+
+  .window-resizable {
+    resize: both;
+    overflow: clip !important;
+    min-width: 280px;
+    min-height: 150px;
+  }
+
+  .window-maximized {
+    @apply !fixed !inset-0 !w-screen !h-screen !rounded-none !top-0 !left-0 !translate-x-0 !translate-y-0 !max-w-none;
+    z-index: 9999 !important;
+    resize: none !important;
   }
 
   #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
+    @apply flex items-center justify-between px-3 py-2 select-none text-sm;
+    background: var(--ub-surface2);
+    border-bottom: 1px solid var(--ub-border);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    cursor: grab;
+    &:active { cursor: grabbing; }
+
+    h2 {
+      @apply text-xs font-medium text-center;
+      color: var(--ub-text);
+    }
+
+    .header-right {
+      width: 52px; 
+    }
   }
 
+
   #safari {
-    @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-4xl absolute top-40 left-2/12 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: #ffffff;
 
     .search {
       @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
@@ -133,7 +249,8 @@ body {
       @apply bg-white p-10 max-w-3xl mx-auto;
 
       h2 {
-        @apply text-xl font-bold text-pink-600 mb-10;
+        @apply text-xl font-bold mb-10;
+        color: var(--ub-orange);
       }
 
       .blog-post {
@@ -146,78 +263,66 @@ body {
         .content {
           @apply col-span-10 space-y-3;
 
-          p {
-            @apply text-xs text-gray-500;
-          }
-
-          h3 {
-            @apply font-semibold text-base text-gray-800;
-          }
-
-          a {
-            @apply text-blue-600 text-xs hover:underline flex items-center gap-3;
-          }
+          p { @apply text-xs text-gray-500; }
+          h3 { @apply font-semibold text-base text-gray-800; }
+          a { @apply text-blue-600 text-xs hover:underline flex items-center gap-3; }
         }
       }
     }
   }
 
   #terminal {
-    @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl absolute top-32 left-1/12 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     h2 {
       @apply font-bold text-sm text-center w-full;
+      color: var(--ub-text);
     }
 
     .techstack {
       @apply text-sm font-roboto p-5;
+      color: var(--ub-text);
 
       .label {
         @apply flex items-center ms-10 mt-7;
+        color: var(--ub-muted);
       }
 
       .content {
-        @apply py-5 my-5 border-y border-dashed space-y-1;
+        @apply py-5 my-5 space-y-1;
+        border-top: 1px dashed var(--ub-border);
+        border-bottom: 1px dashed var(--ub-border);
 
         li {
-          .check {
-            @apply text-[#00A154] w-5;
-          }
-
-          h3 {
-            @apply font-semibold text-[#00A154] w-32 ms-5;
-          }
-
-          ul {
-            @apply flex items-center gap-3;
-          }
+          .check { @apply w-5; color: var(--ub-orange); }
+          h3 { @apply font-semibold w-32 ms-5; color: var(--ub-orange); }
+          ul { @apply flex items-center gap-3; }
         }
       }
 
       .footnote {
-        @apply text-[#00A154] space-y-1;
+        @apply space-y-1;
+        color: var(--ub-orange);
 
         p {
           @apply flex items-center;
-
-          svg {
-            @apply w-5 me-5;
-          }
+          svg { @apply w-5 me-5; }
         }
       }
     }
   }
 
   #contact {
-    @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply max-w-2xl absolute top-60 left-5/12 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     h2 {
       @apply font-bold text-sm text-center w-full;
+      color: var(--ub-text);
     }
 
-    h3 {
-      @apply text-xl font-semibold;
-    }
+    h3 { @apply text-xl font-semibold; color: var(--ub-text); }
 
     ul {
       @apply flex items-center gap-3;
@@ -225,42 +330,37 @@ body {
       li {
         @apply rounded-lg p-3 w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
 
-        a {
-          @apply space-y-5;
-        }
-
-        p {
-          @apply font-semibold text-sm text-white;
-        }
+        a { @apply space-y-5; }
+        p { @apply font-semibold text-sm text-white; }
       }
     }
   }
 
   #photos {
-    @apply max-w-3xl absolute top-96 left-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply max-w-3xl absolute top-96 left-1/2 -translate-y-1/2 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     .sidebar {
-      @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
+      @apply w-3/12 flex-none flex flex-col p-5;
+      background: var(--ub-surface2);
+      border-right: 1px solid var(--ub-border);
 
-      h2 {
-        @apply text-xs font-medium text-gray-400 mb-1;
-      }
+      h2 { @apply text-xs font-medium mb-1; color: var(--ub-muted); }
 
       ul {
         li {
           @apply flex space-y-1 items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
+          color: var(--ub-text);
 
           &:first-child {
-            @apply bg-blue-100 text-blue-700;
+            background: rgba(233,84,32,0.2);
+            color: var(--ub-orange);
           }
 
-          img {
-            @apply w-4;
-          }
+          &:hover:not(:first-child) { background: rgba(255,255,255,0.06); }
 
-          p {
-            @apply text-sm font-medium;
-          }
+          img { @apply w-4; filter: invert(1) opacity(0.7); }
+          p { @apply text-sm font-medium; }
         }
       }
     }
@@ -272,36 +372,24 @@ body {
         @apply grid grid-cols-5 grid-rows-5 gap-2.5;
 
         li {
-          img {
-            @apply size-full object-cover rounded-lg;
-          }
-
-          &:first-child {
-            @apply row-start-1 row-span-3 col-start-1 col-span-3;
-          }
-
-          &:nth-child(2) {
-            @apply row-start-1 row-span-3 col-start-4 col-span-2;
-          }
-
-          &:nth-child(3) {
-            @apply row-start-4 row-span-2 col-start-3 col-span-3;
-          }
-
-          &:last-child {
-            @apply row-start-4 row-span-2 col-start-1 col-span-2;
-          }
+          img { @apply size-full object-cover rounded-lg; }
+          &:first-child  { @apply row-start-1 row-span-3 col-start-1 col-span-3; }
+          &:nth-child(2) { @apply row-start-1 row-span-3 col-start-4 col-span-2; }
+          &:nth-child(3) { @apply row-start-4 row-span-2 col-start-3 col-span-3; }
+          &:last-child   { @apply row-start-4 row-span-2 col-start-1 col-span-2; }
         }
       }
     }
   }
 
   #resume {
-    @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-fit h-fit absolute top-16 left-7/12 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     #window-header {
       h2 {
         @apply font-bold text-sm text-center flex-1;
+        color: var(--ub-text);
       }
     }
   }
@@ -310,21 +398,23 @@ body {
     @apply absolute w-3xl left-40 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
 
     .sidebar {
-      @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3;
+      @apply w-48 flex-none flex flex-col p-5 space-y-3;
+      background: var(--ub-surface2);
+      border-right: 1px solid var(--ub-border);
 
-      h3 {
-        @apply text-xs font-medium text-gray-400 mb-1;
-      }
+      h3 { @apply text-xs font-medium mb-1; color: var(--ub-muted); }
 
       ul {
         @apply space-y-1;
 
         .active {
-          @apply bg-blue-100 text-blue-700;
+          background: rgba(233,84,32,0.2);
+          color: var(--ub-orange);
         }
 
         .not-active {
-          @apply text-gray-700 hover:bg-gray-200;
+          color: var(--ub-text);
+          &:hover { background: rgba(255,255,255,0.06); }
         }
 
         li {
@@ -334,45 +424,41 @@ body {
     }
 
     .content {
-      @apply flex-1 p-8 bg-white max-w-2xl relative;
+      @apply flex-1 p-8 max-w-2xl relative;
+      background: var(--ub-surface);
 
       li {
         @apply absolute flex items-center flex-col gap-3;
 
-        img {
-          @apply object-contain object-center size-16 relative group-hover:scale-105;
-        }
-
-        p {
-          @apply text-sm text-center font-medium w-40;
-        }
+        img { @apply object-contain object-center size-16 relative group-hover:scale-105; }
+        p { @apply text-sm text-center font-medium w-40; color: var(--ub-text); }
       }
     }
   }
 
   #txtfile {
-    @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-md absolute top-36 right-32 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     h2 {
       @apply font-bold text-sm text-center w-full;
+      color: var(--ub-text);
     }
   }
 
   #imgfile {
-    @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl absolute top-40 left-2/12 shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    background: var(--ub-surface);
 
     #window-header {
-      p {
-        @apply font-bold text-[#5f6266];
-      }
+      p { @apply font-bold; color: var(--ub-muted); }
     }
 
     .preview {
-      @apply p-2 bg-gray-200 max-h-[70vh];
+      @apply p-2 max-h-[70vh];
+      background: var(--ub-dark);
 
-      img {
-        @apply w-full h-fit object-contain object-center;
-      }
+      img { @apply w-full h-fit object-contain object-center; }
     }
   }
 
@@ -383,12 +469,12 @@ body {
       li {
         @apply absolute z-0 select-none flex items-center flex-col;
 
-        img {
-          @apply group-hover:bg-gray-950/10 p-1 rounded-md;
-        }
+        img { @apply group-hover:bg-white/10 p-1 rounded-md; }
 
         p {
-          @apply text-sm text-white text-center px-1 rounded-md group-hover:bg-blue-500 transition-colors max-w-40;
+          @apply text-sm text-center px-1 rounded-md transition-colors max-w-40;
+          color: white;
+          &:hover, &:focus { background: var(--ub-orange); }
         }
       }
     }
